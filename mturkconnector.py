@@ -1,8 +1,8 @@
 from boto.mturk.connection import MTurkConnection
 from boto.mturk.question import QuestionContent,Question,QuestionForm,Overview,AnswerSpecification,SelectionAnswer,FormattedContent
+import ConfigParser
 
 SANDBOX = True 
-HIT_URL = "https://codingthecrowd.com/class/vramkris/Assignment_4/game.html"
 NUMBER_OF_HITS = 1  # Number of different HITs posted for this task
 NUMBER_OF_ASSIGNMENTS = 1  # Number of tasks that DIFFERENT workers will be able to take for each HIT
 LIFETIME = 60 * 7  # How long that the task will stay visible if not taken by a worker (in seconds)
@@ -19,10 +19,18 @@ DESCRIPTION = 'Go through the answer choices. Give us the right one and we rewar
 KEYWORDS = ['choices', 'multiple choice', 'question', 'twitter']
 
 
-# Your Amazon Web Services Access Key (private)
-AWS_ACCESS_KEY = 'AKIAJMXQ3GZJOW2XDITQ' # <-- TODO: Enter your access key here
-# Your Amazon Web Services Secret Key (private)
-AWS_SECRET_KEY = 'HIjdRm0sOx5hdp8rFOwIOUo4NKrmHQ8dEtMXt7hl' # <-- TODO: Enter your private key here
+
+config = ConfigParser.ConfigParser()
+config.read("config.ini")
+
+def readConfigurations():
+	dict = {};
+	sections = config.sections()
+	for section in sections:
+		options = config.options(section)
+		for option in options:
+			dict[option] = config.get(section, option)
+	return dict;		
 
 def postHitAndSetReviewIntervals(question, answers):
 	ratings =[('Very Bad','-2'),
@@ -53,12 +61,13 @@ def createHits(question, answers):
 	questionForm = QuestionForm();
 	questionForm.append(overview)
 	questionForm.append(q)
-	conn = MTurkConnection(aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY, host=mturk_url)
+	conn = MTurkConnection(aws_access_key_id=params['aws_access_key'], aws_secret_access_key=params['aws_secret_key'], host=mturk_url)
 	for i in range(0, NUMBER_OF_HITS):
 		create_hit_rs = conn.create_hit(questions=questionForm, lifetime=LIFETIME, max_assignments=NUMBER_OF_ASSIGNMENTS, title=TITLE, keywords=KEYWORDS, reward=REWARD, duration=DURATION, approval_delay=APPROVAL_DELAY, annotation=DESCRIPTION)
 		print(preview_url + create_hit_rs[0].HITTypeId)
 		print("HIT ID: " + create_hit_rs[0].HITId)
 
 
-
-postHitAndSetReviewIntervals("how good are you???")		
+params = readConfigurations()
+print params
+postHitAndSetReviewIntervals("how good are you???", answers=None)		
