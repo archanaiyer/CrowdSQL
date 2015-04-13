@@ -1,6 +1,7 @@
 from boto.mturk.connection import MTurkConnection
 from boto.mturk.question import QuestionContent,Question,QuestionForm,Overview,AnswerSpecification,SelectionAnswer,FormattedContent
 import ConfigParser
+from threading import Timer
 
 SANDBOX = True 
 NUMBER_OF_HITS = 1  # Number of different HITs posted for this task
@@ -38,8 +39,9 @@ def postHitAndSetReviewIntervals(question, answers):
          ('Not bad','0'),
          ('Good','1'),
          ('Very Good','1')]
-	createdHit = createHits(question, ratings);
-	print "Testing now"
+	createdHit = createHits(question, ratings)
+	Timer(10, getAllReviewableHits).start()
+	#print "Testing now"
 
 def createHits(question, answers):
 	if SANDBOX:
