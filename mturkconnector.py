@@ -3,14 +3,21 @@ from boto.mturk.question import QuestionContent,Question,QuestionForm,Overview,A
 from threading import Timer
 import settings 
 import get_hits
+import time
 
-SANDBOX = True 
-NUMBER_OF_HITS = 1  # Number of different HITs posted for this task
-NUMBER_OF_ASSIGNMENTS = 1  # Number of tasks that DIFFERENT workers will be able to take for each HIT
-LIFETIME = 60 * 7  # How long that the task will stay visible if not taken by a worker (in seconds)
-REWARD = 0.1  # Base payment value for completing the task (in dollars)
-DURATION = 60*2  # How long the worker will be able to work on a single task (in seconds)
-APPROVAL_DELAY = 60*60*2  # How long after the task is completed will the worker be automatically paid if not manually approved (in seconds)
+SANDBOX = True
+# Number of different HITs posted for this task 
+NUMBER_OF_HITS = 1 
+# Number of tasks that DIFFERENT workers will be able to take for each HIT
+NUMBER_OF_ASSIGNMENTS = 2  
+# How long that the task will stay visible if not taken by a worker (in seconds)
+LIFETIME = 60 * 7 
+# Base payment value for completing the task (in dollars)
+REWARD = 0.1  
+# How long the worker will be able to work on a single task (in seconds)
+DURATION = 60*2  
+# How long after the task is completed will the worker be automatically paid if not manually approved (in seconds)
+APPROVAL_DELAY = 60*60*2  
 
 conn = None
 # HIT title (as it will appear on the public listing)
@@ -19,19 +26,28 @@ TITLE = 'Earn $0.10/question'
 DESCRIPTION = 'Go through the answer choices. Give us the right one and we reward you.'
 # Search terms for the HIT posting
 KEYWORDS = ['choices', 'multiple choice', 'question', 'twitter']
+# hitIdList = "3XUSYT70IT1S2BXA1XINPBQDDRJD0B"
+mturk_url = 'mechanicalturk.sandbox.amazonaws.com'
 
-
-
+# the input to this function is the question and a set of options for answers
+# format for answers is [(option1,1),(option2,2),(option3,3),(...)]
 def postHitAndSetReviewIntervals(question, answers):
-	ratings =[('Very Bad','-2'),
-         ('Bad','-1'),
-         ('Not bad','0'),
-         ('Good','1'),
-         ('Very Good','1')]
-	hitIdList = createHits(question, ratings)
-	# get_hits.get_all_reviewable_hits(hitIdList, conn)
-	Timer(10, get_hits.get_all_reviewable_hits, [hitIdList, conn]).start()
+	ratings =[('Very Bad','1'),
+         ('Bad','2'),
+         ('Not bad','3'),
+         ('Good','4'),
+         ('Very Good','5')]
 
+	hitIdList = createHits(question, ratings)
+
+	conn = MTurkConnection(aws_access_key_id=params['aws_access_key'], aws_secret_access_key=params['aws_secret_key'], host=mturk_url)
+	
+	# after 5 second delay call review hits
+	time.sleep(60)
+	get_hits.get_all_reviewable_hits(hitIdList,conn)
+	#Timer(60, get_hits.get_all_reviewable_hits, [hitIdList, conn]).start()
+
+# creates a hit based on the preset questions and answers, returns a list of HIT IDs that have been created
 def createHits(question, answers):
 	if SANDBOX:
 		mturk_url = 'mechanicalturk.sandbox.amazonaws.com'
@@ -42,7 +58,7 @@ def createHits(question, answers):
 
 	#Create Hit Form Structure	
 	overview  = Overview()
-	overview.append_field('Title', 'We need the crowd!!')
+	overview.append_field('Title', 'We want to know the crowds opinion!')
 	overview.append(FormattedContent('<a href="http://programthecrowd.com/">Visit us here</a>'))
 	questionContent = QuestionContent()
 	questionContent.append_field('Title', question);
@@ -54,6 +70,7 @@ def createHits(question, answers):
 	hitIdList = []
 	global conn
 	conn = MTurkConnection(aws_access_key_id=params['aws_access_key'], aws_secret_access_key=params['aws_secret_key'], host=mturk_url)
+	
 	#For Loop to create and post hits
 	for i in range(0, NUMBER_OF_HITS):
 		create_hit_rs = conn.create_hit(questions=questionForm, lifetime=LIFETIME, max_assignments=NUMBER_OF_ASSIGNMENTS, title=TITLE, keywords=KEYWORDS, reward=REWARD, duration=DURATION, approval_delay=APPROVAL_DELAY, annotation=DESCRIPTION)
@@ -64,5 +81,4 @@ def createHits(question, answers):
 	return hitIdList
 
 params = settings.readConfigurations()
-# print params
-postHitAndSetReviewIntervals("how good are you???", answers=None)		
+postHitAndSetReviewIntervals("How good do you think you are?", answers=None)		
