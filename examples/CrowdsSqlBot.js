@@ -58,7 +58,7 @@ stream.on('tweet', function(tweet) {
 
 			}
 			Bot.post('statuses/update', {
-					status: '@' + tweet.user.screen_name + " The crowd has spoken! " + "You asked " + results + " the crowd thinks "
+					status: '@' + tweet.user.screen_name + " The crowd has spoken! " + "You asked " + results[2] + " the crowd thinks "
 					+ answer,
 					in_reply_to_status_id: tweet.id
 				},
