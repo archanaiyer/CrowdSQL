@@ -4,6 +4,7 @@ from threading import Timer
 import settings 
 import get_hits
 import time
+import sys
 
 SANDBOX = True
 # Number of different HITs posted for this task 
@@ -32,19 +33,34 @@ mturk_url = 'mechanicalturk.sandbox.amazonaws.com'
 # the input to this function is the question and a set of options for answers
 # format for answers is [(option1,1),(option2,2),(option3,3),(...)]
 def postHitAndSetReviewIntervals(question, answers):
+	# qaList = []
+	# for element in sys.argv[1]:
+		# qaList.append(element)
+	# count = 1
+	question = None
+	answers = []	
+	for index, element in enumerate(sys.argv):
+		if index == 1:
+			question = element
+		elif index > 0:
+			tuple = (element, (index -1))
+			answers.append(tuple)
+			# count++
+	# answers = qaList	
 	params = settings.readConfigurations()
-	ratings =[('Very Bad','1'),
-         ('Bad','2'),
-         ('Not bad','3'),
-         ('Good','4'),
-         ('Very Good','5')]
+	# print answers
+	# ratings =[('Very Bad','1'),
+ #         ('Bad','2'),
+ #         ('Not bad','3'),
+ #         ('Good','4'),
+ #         ('Very Good','5')]
 
-	hitIdList = createHits(question, ratings, params)
+	hitIdList = createHits(question, answers, params)
 
 	conn = MTurkConnection(aws_access_key_id='AKIAJMXQ3GZJOW2XDITQ', aws_secret_access_key='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', host=mturk_url)
 	
 	# after 5 second delay call review hits
-	time.sleep(30)
+	time.sleep(10)
 	get_hits.get_all_reviewable_hits(hitIdList,conn)
 	#Timer(60, get_hits.get_all_reviewable_hits, [hitIdList, conn]).start()
 
@@ -83,4 +99,4 @@ def createHits(question, answers, params):
 
 
 #print params
-postHitAndSetReviewIntervals("How good do you think you are?", answers=None)		
+postHitAndSetReviewIntervals(question=None, answers=None)		

@@ -9,9 +9,10 @@ import time
 # approves and deletes that particular HIT
 def get_all_reviewable_hits(hitIdList, mtc):
     page_size = 10
-
+    result = []
+    # while (True):
     hits = mtc.get_reviewable_hits(page_size=page_size)
-
+    # print hits
     # print "Total results to fetch %s " % hits.TotalNumResults
     # print "Request hits page %i" % 1
     total_pages = float(hits.TotalNumResults)/page_size
@@ -21,15 +22,15 @@ def get_all_reviewable_hits(hitIdList, mtc):
     else:
         total_pages = int_total
     pn = 1
-    result = []
+    
     while pn < total_pages:
         pn = pn + 1
         # print "Request hits page %i" % pn
         temp_hits = mtc.get_reviewable_hits(page_size=page_size,page_number=pn)
         hits.extend(temp_hits)
         # print "~~~~~~~~~~~"
-    print hits
-    f = open('myfile', 'w');
+    # print hits
+    # f = open('myfile', 'w');
     # f.write(hits);
     for hit in hits:
         option1 = 0
@@ -37,9 +38,9 @@ def get_all_reviewable_hits(hitIdList, mtc):
         option3 = 0
         option4 = 0
 
-        print hit.HITId
-        f.write('\n:'+hit.HITId)
-        print "list: ", hitIdList
+        # print hit.HITId
+        # f.write('\n:'+hit.HITId)
+        # print "list: ", hitIdList
         if hit.HITId in hitIdList:  
             # print "--------------------"
             # print hitIdList 
@@ -68,17 +69,25 @@ def get_all_reviewable_hits(hitIdList, mtc):
                 # mtc.approve_assignment(assignment,feedback="none")
                 # print "Approved assignment"
             
-            result = [option1,option2,option3,option4]
+            # result = [option1,option2,option3,option4]
+            result.append(option1)
+            result.append(option2)
+            result.append(option3)
+            result.append(option4)
+            print  result
+            # print result
             # f.write(int(option1))
-
-            print "hello", result
+            # if not result:
+            #     print "Val Set:", result
+            #     break;
+            # print "hello", result
             # mtc.expire_hit(hit.HITId)
             # time.sleep(0.25)
             # mtc.dispose_hit(hit.HITId)
 
             # print("HIT " + hit.HITId + " was deleted!")  
-        # create timer to  invoke self after 10 seconds only if results are not yet available
-    f.close()
-    return result 
+
+    # f.close()
+    # return result 
 
 
