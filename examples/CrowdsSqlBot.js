@@ -28,29 +28,48 @@ stream.on('tweet', function(tweet) {
 
 
 		var options = {
-			args: [firstQuestion, res[1],res[2],res[3]]
+			args: [firstQuestion, res[1], res[2], res[3], res[4]]
 		};
 
-
-		setTimeout(function() {
-			PythonShell.run('mturkconnector.py', options, function(err, results) {
-				if (err) throw err;
-				// results is an array consisting of messages collected during execution 
-				console.log('results: %j', results);
-			});
-		}, 1000);
-
-		Bot.post('statuses/update', {
-				status: '@' + tweet.user.screen_name + " " + "42 Bro I totally gotch U",
-				in_reply_to_status_id: tweet.id
-			},
-			function(err, data, response) {
-				if (err) {
-					console.log("Error");
-					console.log(err);
+		PythonShell.run('mturkconnector.py', options, function(err, results) {
+			if (err) throw err;
+			// results is an array consisting of messages collected during execution 
+			mostPopular = 0;
+			mostPopularCount = results[0];
+			answer = "";
+			for (i = 0; i < results.length; i++) {
+				if (results[i] > mostPopularCount) {
+					mostPopularCount = results[i];
+					mostPopular = i;
 				}
-				// console.log(response);
-			})
+			}
+
+			switch (mostPopular) {
+				case 0:
+					answer = res[1];
+					break;
+				case 1:
+					answer = res[2];
+				case 2:
+					answer = res[3];
+				case 3:
+					answer = res[4];
+
+			}
+			Bot.post('statuses/update', {
+					status: '@' + tweet.user.screen_name + "The crowd has spoken! " + "You asked " + results[0] + " the crowd thinks "
+					+ answer,
+					in_reply_to_status_id: tweet.id
+				},
+				function(err, data, response) {
+					if (err) {
+						console.log("Error");
+						console.log(err);
+					}
+					// console.log(response);
+				})
+			console.log('results: %j', results);
+		});
 	}
 })
 
