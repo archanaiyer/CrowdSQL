@@ -33,14 +33,15 @@ stream.on('tweet', function(tweet) {
 
 		PythonShell.run('mturkconnector.py', options, function(err, results) {
 			if (err) throw err;
-			console.log(results);
+		
+			actualArray = results[2];
 			// results is an array consisting of messages collected during execution 
 			mostPopular = 0;
-			mostPopularCount = results[0];
+			mostPopularCount = actualArray[0];
 			answer = "";
-			for (i = 0; i < results.length; i++) {
+			for (i = 0; i < actualArray.length; i++) {
 				if (results[i] > mostPopularCount) {
-					mostPopularCount = results[i];
+					mostPopularCount = actualArray[i];
 					mostPopular = i;
 				}
 			}
@@ -58,7 +59,7 @@ stream.on('tweet', function(tweet) {
 
 			}
 			Bot.post('statuses/update', {
-					status: '@' + tweet.user.screen_name + " The crowd has spoken! " + "You asked " + results[2] + " the crowd thinks "
+					status: '@' + tweet.user.screen_name + " The crowd has spoken! " + "You asked " + firstQuestion + " the crowd thinks "
 					+ answer,
 					in_reply_to_status_id: tweet.id
 				},
@@ -69,7 +70,7 @@ stream.on('tweet', function(tweet) {
 					}
 					// console.log(response);
 				})
-			console.log('results: %j', results);
+		//	console.log('results: %j', results);
 		});
 	}
 })
