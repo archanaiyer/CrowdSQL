@@ -33,6 +33,7 @@ stream.on('tweet', function(tweet) {
 
 		PythonShell.run('mturkconnector.py', options, function(err, results) {
 			if (err) throw err;
+			console.log(results);
 			// results is an array consisting of messages collected during execution 
 			mostPopular = 0;
 			mostPopularCount = results[0];
