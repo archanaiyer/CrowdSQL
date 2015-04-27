@@ -34,28 +34,33 @@ stream.on('tweet', function(tweet) {
 		PythonShell.run('mturkconnector.py', options, function(err, results) {
 			if (err) throw err;
 		
-			actualArray = results[2];
+			console.log(results);
+			actualArray = results[1].split(",");
+			// console.log(actualArray);
 			// results is an array consisting of messages collected during execution 
 			mostPopular = 0;
 			mostPopularCount = actualArray[0];
 			answer = "";
 			for (i = 0; i < actualArray.length; i++) {
-				if (results[i] > mostPopularCount) {
+				if (actualArray[i] > mostPopularCount) {
 					mostPopularCount = actualArray[i];
 					mostPopular = i;
 				}
 			}
-
+			// console.log(mostPopular + " , " + mostPopularCount);
 			switch (mostPopular) {
 				case 0:
 					answer = res[1];
 					break;
 				case 1:
 					answer = res[2];
+					break;
 				case 2:
 					answer = res[3];
+					break;
 				case 3:
 					answer = res[4];
+					break;
 
 			}
 			Bot.post('statuses/update', {

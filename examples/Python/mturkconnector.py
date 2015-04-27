@@ -10,7 +10,7 @@ SANDBOX = True
 # Number of different HITs posted for this task 
 NUMBER_OF_HITS = 1 
 # Number of tasks that DIFFERENT workers will be able to take for each HIT
-NUMBER_OF_ASSIGNMENTS = 1  
+NUMBER_OF_ASSIGNMENTS = 1 
 # How long that the task will stay visible if not taken by a worker (in seconds)
 LIFETIME = 60 * 7 
 # Base payment value for completing the task (in dollars)
@@ -46,7 +46,6 @@ def postHitAndSetReviewIntervals(question, answers):
 			tuple = (element, (index -1))
 			answers.append(tuple)
 			# count++
-	# answers = qaList	
 	params = settings.readConfigurations()
 	# print answers
 	# ratings =[('Very Bad','1'),
@@ -60,7 +59,7 @@ def postHitAndSetReviewIntervals(question, answers):
 	conn = MTurkConnection(aws_access_key_id='AKIAJMXQ3GZJOW2XDITQ', aws_secret_access_key='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', host=mturk_url)
 	
 	# after 5 second delay call review hits
-	time.sleep(10)
+	time.sleep(30)
 	get_hits.get_all_reviewable_hits(hitIdList,conn)
 	#Timer(60, get_hits.get_all_reviewable_hits, [hitIdList, conn]).start()
 
