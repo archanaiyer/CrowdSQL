@@ -35,7 +35,7 @@ stream.on('tweet', function(tweet) {
 			if (err) throw err;
 		
 			console.log(results);
-			actualArray = results[1].split(",");
+			actualArray = results[0].split(",");
 			// console.log(actualArray);
 			// results is an array consisting of messages collected during execution 
 			mostPopular = 0;

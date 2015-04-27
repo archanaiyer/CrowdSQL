@@ -1,6 +1,7 @@
 from boto.mturk.connection import MTurkConnection
 from boto.mturk.question import QuestionContent,Question,QuestionForm,Overview,AnswerSpecification,SelectionAnswer,FormattedContent
 from threading import Timer
+import ConfigParser
 import settings 
 import get_hits
 import time
@@ -33,10 +34,7 @@ mturk_url = 'mechanicalturk.sandbox.amazonaws.com'
 # the input to this function is the question and a set of options for answers
 # format for answers is [(option1,1),(option2,2),(option3,3),(...)]
 def postHitAndSetReviewIntervals(question, answers):
-	# qaList = []
-	# for element in sys.argv[1]:
-		# qaList.append(element)
-	# count = 1
+	
 	question = None
 	answers = []	
 	for index, element in enumerate(sys.argv):
@@ -45,8 +43,7 @@ def postHitAndSetReviewIntervals(question, answers):
 		elif index > 0:
 			tuple = (element, (index -1))
 			answers.append(tuple)
-			# count++
-	params = settings.readConfigurations()
+
 	# print answers
 	# ratings =[('Very Bad','1'),
  #         ('Bad','2'),
@@ -55,9 +52,7 @@ def postHitAndSetReviewIntervals(question, answers):
  #         ('Very Good','5')]
 
 	hitIdList = createHits(question, answers, params)
-
-	conn = MTurkConnection(aws_access_key_id='AKIAJMXQ3GZJOW2XDITQ', aws_secret_access_key='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', host=mturk_url)
-	
+		
 	# after 5 second delay call review hits
 	time.sleep(30)
 	get_hits.get_all_reviewable_hits(hitIdList,conn)
@@ -85,7 +80,9 @@ def createHits(question, answers, params):
 	questionForm.append(q)
 	hitIdList = []
 	global conn
-	conn = MTurkConnection(aws_access_key_id='AKIAJMXQ3GZJOW2XDITQ', aws_secret_access_key='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', host=mturk_url)
+	key = params['aws_access_key']
+	secret = params['aws_secret_key']
+	conn = MTurkConnection(aws_access_key_id=key, aws_secret_access_key=secret, host=mturk_url)
 	
 	#For Loop to create and post hits
 	for i in range(0, NUMBER_OF_HITS):
@@ -97,5 +94,6 @@ def createHits(question, answers, params):
 	return hitIdList
 
 
-#print params
-postHitAndSetReviewIntervals(question=None, answers=None)		
+params = settings.readConfigurations()
+postHitAndSetReviewIntervals(question=None, answers=None)	
+
