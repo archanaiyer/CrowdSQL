@@ -1,0 +1,19 @@
+.navbar{
+    background-color: rgb(74, 74, 74);
+    height: 100px;
+}
+.col-md-6{
+    margin-top: 10%;
+}
+span{
+    margin-right: 8%;
+}
+
+svg{
+    padding-right:23%;
+}
+
+div.graphlabel{
+    margin-top: 0px;
+    float: left;
+}
