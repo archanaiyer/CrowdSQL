@@ -2,6 +2,7 @@
 
 $( document ).ready(function() {
 
+ 
 
     var config1 = liquidFillGaugeDefaultSettings();
     config1.circleColor = "#FF7777";
@@ -44,11 +45,61 @@ $( document ).ready(function() {
     config4.textVertPosition = 0.5;
     config4.waveAnimateTime = 2000;
     config4.waveHeight = 0.3;
- 
-    loadLiquidFillGauge("fillgauge1", 15, config1);
-    loadLiquidFillGauge("fillgauge2", 40, config2);
-    loadLiquidFillGauge("fillgauge3", 40, config3);
-    loadLiquidFillGauge("fillgauge4", 5, config4);
+
+    results = [{"question":"Hawaii?","Lol":10,"No":10,"Sure":10,"Maybe":15},{"question":"Bananas","Totes":14,"Oyeah":40,"Ew":30,"Potato":45},{"question":"Sleep?","It's for losers":14,"Oyeah":40,"YESSS":30,"<3":45}];
+    initialLoad(results);
+
+    function initialLoad(data){   
+        i=0;
+        var data_length = Object.keys(data).length;
+        for(var i = 0; i<data_length; i++){
+            answers=[];
+            results=[];
+            index = 0;
+            question = "";
+            $.each(data[i], function(key, value){
+                if (key == "question"){
+                    question = value;
+                }
+                else{
+                    answers[index] = key;
+                    results[index] = value;
+                    index++;
+                }
+            });
+            loadSurveyGraphs(question,answers,results, i);
+        }
+        
+    }
+
+    setTimeout(function(){
+      $("#survey li:last-child").remove();
+      loadSurveyGraphs("SLEEP", ["ya","yes","no","mmmm"],[60,60,60,60],4);
+    }, 4000);
+    
+    
+    function loadSurveyGraphs(question, answers, results, i){
+
+        var part1 = '<li><div class=" question row"><h3>';
+        var part2 = '</h3></div><div class="results row">';
+        var index = (i*4) + 1;
+        var graph1 = '<svg id="fillgauge'+i+'"></svg>';
+        var graph2 = '<svg id="fillgauge'+(i+1)+'"></svg>';
+        var graph3 = '<svg id="fillgauge'+(i+2)+'"></svg>';
+        var graph4 = '<svg id="fillgauge'+(i+3)+'"></svg>';
+        var part3 = '</div><div class="answer row graphlabel">';
+        var label1 = '<div class="col-md-3">'+answers[0]+'</div>';
+        var label2 = '<div class="col-md-3">'+answers[1]+'</div>';
+        var label3 = '<div class="col-md-3">'+answers[2]+'</div>';
+        var label4 = '<div class="col-md-3">'+answers[3]+'</div>';
+        var part4 = '<li>';
+        $('#survey').prepend(part1+question+part2+graph1+graph2+graph3+graph4+part3+label1+label2+label3+label4+part4);
+        loadLiquidFillGauge("fillgauge"+i, results[0], config1); 
+        loadLiquidFillGauge("fillgauge"+(i+1), results[1], config2);
+        loadLiquidFillGauge("fillgauge"+(i+2), results[2], config3);
+        loadLiquidFillGauge("fillgauge"+(i+3), results[3], config4);
+    }
+
 });
 
 

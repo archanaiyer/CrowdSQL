@@ -2,110 +2,29 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>CrowdSQL</title>
     <script src="http://d3js.org/d3.v3.min.js" language="JavaScript"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.js"></script>
-
     <script src="js/liquidFillGauge.js" language="JavaScript"></script>
     <script type="text/javascript" src="js/crowdSQL.js"></script>
-
-    <style>
-        .liquidFillGaugeText { font-family: Helvetica; font-weight: bold; }
-    </style>
     <style type="text/css" src="css/crowdSQL.css"></style>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 </head>
 <body>
 <nav class="navbar navbar-default">
   <div class="container-fluid">
+  <h1>CrowdSQL</h1>
   </div>
 </nav>
-<script language="JavaScript">
-    // var config1 = liquidFillGaugeDefaultSettings();
-    // config1.circleColor = "#FF7777";
-    // config1.textColor = "#FF4444";
-    // config1.waveTextColor = "#FFAAAA";
-    // config1.waveColor = "#FFDDDD";
-    // config1.circleThickness = 0.1;
-    // config1.textVertPosition = 0.5;
-    // config1.waveAnimateTime = 1000;
-
-    // var config2 = liquidFillGaugeDefaultSettings();
-    // config2.circleColor = "##91c8ff";
-    // config2.textColor = "#91c8ff";
-    // config2.waveTextColor = "##91c8ff";
-    // config2.waveColor = "#ddeeff";
-    // config2.circleThickness = 0.1;
-    // config2.circleFillGap = 0.1;
-    // config2.textVertPosition = 0.5;
-    // config2.waveAnimateTime = 2000;
-    // config2.waveHeight = 0.3;
-
-    // var config3 = liquidFillGaugeDefaultSettings();
-    // config3.circleColor = "#9a9a9a";
-    // config3.textColor = "#9a9a9a";
-    // config3.waveTextColor = "##91c8ff";
-    // config3.waveColor = "#e6e6e6";
-    // config3.circleThickness = 0.1;
-    // config3.circleFillGap = 0.1;
-    // config3.textVertPosition = 0.5;
-    // config3.waveAnimateTime = 2000;
-    // config3.waveHeight = 0.3;
-
-    // var config4 = liquidFillGaugeDefaultSettings();
-    // config4.circleColor = "#3535ff";
-    // config4.textColor = "#3535ff";
-    // config4.waveTextColor = "##91c8ff";
-    // config4.waveColor = "#cfcfff";
-    // config4.circleThickness = 0.1;
-    // config4.circleFillGap = 0.1;
-    // config4.textVertPosition = 0.5;
-    // config4.waveAnimateTime = 2000;
-    // config4.waveHeight = 0.3;
-
-</script>
-
-<div class="question row">
-    <div class="col-md-6">
-       <h3> Will you be my friend? </h3>
+<div class="row">
+    <div class="col-md-4">   
+    </div>
+    <div class="col-md-4">
+        <ul id="survey">
+        </ul> 
     </div>
 </div>
-
-<div class="results row">
-    <div class="col-md-6">
-        <svg id="fillgauge1" width="20%" height="100"></svg>
- 
-        
-        <svg id="fillgauge2" width="20%" height="100"></svg>
-        <script type="text/javascript"></script>
-        
-        <svg id="fillgauge3" width="20%" height="100"></svg>
-        <script type="text/javascript"></script>
-        
-        <svg id="fillgauge4" width="20%" height="100"></svg>
-        <script type="text/javascript"></script>
-        
-    </div>
-</div>  
-<div class="answer row">
-    <div class="graphlabel col-md-6">
-        <div class="col-md-3">
-            I dont care               
-        </div>
-        <div class="col-md-3">
-            Yes           
-        </div>
-        <div class="col-md-3">
-            No              
-        </div>
-        <div class="col-md-3">
-            Absolutely               
-        </div>
-    </div>
-</div>  
-
-
 
 <style type="text/css">
 .navbar{
@@ -117,12 +36,13 @@ span{
 }
 
 svg{
-    padding-right:23%;
+    width: 20%;
+    height: 100px;
+    margin-right: 5%;
 }
 
 div.graphlabel{
     margin-top: 0px;
-    float: left;
 }
 
 .question{
@@ -132,6 +52,16 @@ div.graphlabel{
 .answer{
     margin-bottom: 5%;
 }
+
+.liquidFillGaugeText { 
+    font-family: Helvetica; font-weight: bold; 
+}
+
+ul{
+    list-style-type: none;
+}
+
 </style>
+
 </body>
 </html>
