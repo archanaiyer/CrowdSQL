@@ -7,11 +7,11 @@ import get_hits
 import time
 import sys
 
-SANDBOX = False
+SANDBOX = True
 # Number of different HITs posted for this task 
 NUMBER_OF_HITS = 1 
 # Number of tasks that DIFFERENT workers will be able to take for each HIT
-NUMBER_OF_ASSIGNMENTS = 2
+NUMBER_OF_ASSIGNMENTS = 1
 # How long that the task will stay visible if not taken by a worker (in seconds)
 LIFETIME = 60 * 7 
 # Base payment value for completing the task (in dollars)
@@ -82,12 +82,12 @@ def createHits(question, answers, params):
 	global conn
 	# key = params['aws_access_key']
 	# secret = params['aws_secret_key']
-	conn = MTurkConnection(aws_access_key_id='AKIAJMXQ3GZJOW2XDITQ', aws_secret_access_key='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', host=mturk_url)
+	conn = MTurkConnection(aws_access_key_id='AKIAJBTEJI2RGTJH7OBA', aws_secret_access_key='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', host=mturk_url)
 	
 	#For Loop to create and post hits
 	for i in range(0, NUMBER_OF_HITS):
 		create_hit_rs = conn.create_hit(questions=questionForm, lifetime=LIFETIME, max_assignments=NUMBER_OF_ASSIGNMENTS, title=TITLE, keywords=KEYWORDS, reward=REWARD, duration=DURATION, approval_delay=APPROVAL_DELAY, annotation=DESCRIPTION)
-		# print(preview_url + create_hit_rs[0].HITTypeId)
+		print(preview_url + create_hit_rs[0].HITTypeId)
 		# print("HIT ID: " + create_hit_rs[0].HITId)
 		hitIdList.append(create_hit_rs[0].HITId);
 

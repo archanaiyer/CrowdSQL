@@ -22,14 +22,15 @@ client.lrange('questions', 0, -1, function(err, result) {
 
 //console.log(io.sockets);
 server.listen(8080);
+io.set('log level', 1);
 
 io.sockets.on('connection', function(socket) {
 	curSocket = socket.id;
-	io.sockets.socket(curSocket).emit('start', totalResults.slice(0, 6), totalResults.length);
+	io.sockets.socket(curSocket).emit('start', totalResults.slice(0, 3), totalResults.length);
 	socket.on("requestMoreConnections", function() {
 		toSend = totalResults.shift();
 		totalResults.push(toSend);
-		io.sockets.emit('newQuestion', toSend); // results in: { userEmail: 'awesome' }
+		io.sockets.emit('fetchedOldQuestion', toSend); // results in: { userEmail: 'awesome' }
 	})
 });
 
@@ -79,6 +80,7 @@ stream.on('tweet', function(tweet) {
 		var options = {
 			args: [firstQuestion, res[1], res[2], res[3], res[4]]
 		};
+		console.log("GOT TWEET");
 
 		PythonShell.run('mturkconnector.py', options, function(err, results) {
 
@@ -90,22 +92,10 @@ stream.on('tweet', function(tweet) {
 			toStore = new question(firstQuestion, res[1], results[0], res[2],
 				results[1], res[3], results[2], res[4], results[3], Date.now());
 			client.rpush('questions', JSON.stringify(toStore));
-			totalResults.push(JSON.stringify(toStore));
+			totalResults.unshift(JSON.stringify(toStore));
 			console.log(JSON.stringify(toStore));
 
-			client.lindex('questions',5, function(err, result) {
-				if (err) {
-					console.log(error);
-				} else {
-					console.log(result);
-					//console.log(result[4]["value1"]);
-				}
-			});
-
-			io.sockets.emit('newQuestion', toStore);
-
-			//console.log(client.lindex('questions', 0));
-
+			//io.sockets.emit('newQuestion', JSON.stringify(toStore));
 
 			mostPopular = 0;
 			mostPopularCount = actualArray[0];
