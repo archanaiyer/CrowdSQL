@@ -7,15 +7,15 @@ import get_hits
 import time
 import sys
 
-SANDBOX = True
+SANDBOX = False
 # Number of different HITs posted for this task 
 NUMBER_OF_HITS = 1 
 # Number of tasks that DIFFERENT workers will be able to take for each HIT
-NUMBER_OF_ASSIGNMENTS = 1 
+NUMBER_OF_ASSIGNMENTS = 2
 # How long that the task will stay visible if not taken by a worker (in seconds)
 LIFETIME = 60 * 7 
 # Base payment value for completing the task (in dollars)
-REWARD = 0.1  
+REWARD = 0.2
 # How long the worker will be able to work on a single task (in seconds)
 DURATION = 60*2  
 # How long after the task is completed will the worker be automatically paid if not manually approved (in seconds)
@@ -23,11 +23,11 @@ APPROVAL_DELAY = 60*60*2
 
 conn = None
 # HIT title (as it will appear on the public listing)
-TITLE = 'Earn $0.10/question'
+TITLE = 'Earn $0.20 by answering 1 SIMPLE Question!'
 # Description of the HIT that workers will see when deciding to accept it or not
-DESCRIPTION = 'Go through the answer choices. Give us the right one and we reward you.'
+DESCRIPTION = 'Go through the answer choices. Give us your opinion and we reward you.'
 # Search terms for the HIT posting
-KEYWORDS = ['choices', 'multiple choice', 'question', 'twitter']
+KEYWORDS = ['choices', 'multiple choice', 'question', 'twitter', 'crowd opinion']
 # hitIdList = "3XUSYT70IT1S2BXA1XINPBQDDRJD0B"
 mturk_url = 'mechanicalturk.sandbox.amazonaws.com'
 

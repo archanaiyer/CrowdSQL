@@ -72,10 +72,10 @@ $( document ).ready(function() {
         
     }
 
-    setTimeout(function(){
+    setInterval(function(){
       $("#survey li:last-child").remove();
-      loadSurveyGraphs("SLEEP", ["ya","yes","no","mmmm"],[60,60,60,60],4);
-    }, 4000);
+      loadSurveyGraphs("TEST", ["ya","yes","no","mmmm"],[60,60,60,60],4);
+    }, 10000);
     
     
     function loadSurveyGraphs(question, answers, results, i){
@@ -92,7 +92,7 @@ $( document ).ready(function() {
         var label2 = '<div class="col-md-3">'+answers[1]+'</div>';
         var label3 = '<div class="col-md-3">'+answers[2]+'</div>';
         var label4 = '<div class="col-md-3">'+answers[3]+'</div>';
-        var part4 = '<li>';
+        var part4 = '</li>';
         $('#survey').prepend(part1+question+part2+graph1+graph2+graph3+graph4+part3+label1+label2+label3+label4+part4);
         loadLiquidFillGauge("fillgauge"+i, results[0], config1); 
         loadLiquidFillGauge("fillgauge"+(i+1), results[1], config2);
