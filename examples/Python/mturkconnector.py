@@ -80,9 +80,9 @@ def createHits(question, answers, params):
 	questionForm.append(q)
 	hitIdList = []
 	global conn
-	key = params['aws_access_key']
-	secret = params['aws_secret_key']
-	conn = MTurkConnection(aws_access_key_id=key, aws_secret_access_key=secret, host=mturk_url)
+	# key = params['aws_access_key']
+	# secret = params['aws_secret_key']
+	conn = MTurkConnection(aws_access_key_id='AKIAJMXQ3GZJOW2XDITQ', aws_secret_access_key='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', host=mturk_url)
 	
 	#For Loop to create and post hits
 	for i in range(0, NUMBER_OF_HITS):

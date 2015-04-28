@@ -2,6 +2,36 @@ var twitLib = require('../lib/twitter'),
 	config = require('../config1');
 var PythonShell = require('python-shell');
 Bot = new twitLib(config);
+var redis = require("redis"),
+	client = redis.createClient();
+var express = require('express');
+
+var uuid = require('node-uuid');
+app = express(), server = require('http').createServer(app), io = require('socket.io').listen(server);
+
+totalResults = 0;
+
+client.lrange('questions', 0, -1, function(err, result) {
+	if (err) {
+		console.log(error);
+	} else {
+		totalResults = result;
+		//console.log(result[4]["value1"]);
+	}
+});
+
+//console.log(io.sockets);
+server.listen(8080);
+
+io.sockets.on('connection', function(socket) {
+	curSocket = socket.id;
+	io.sockets.socket(curSocket).emit('start', totalResults.slice(0, 6), totalResults.length);
+	socket.on("requestMoreConnections", function() {
+		toSend = totalResults.shift();
+		totalResults.push(toSend);
+		io.sockets.emit('newQuestion', toSend); // results in: { userEmail: 'awesome' }
+	})
+});
 
 var options = {
 	scriptPath: '/Users/danielshlyuger/node_modules/twit/examples/'
@@ -13,6 +43,25 @@ var stream = Bot.stream('user', {
 }, {
 	with: "followings"
 })
+
+function question(question, answer1, value1, answer2, value2, answer3, value3, answer4, value4, timestamp) {
+
+	this.question = question;
+
+	this.answer1 = answer1;
+	this.value1 = value1;
+
+	this.answer2 = answer2;
+	this.value2 = value2;
+
+	this.answer3 = answer3;
+	this.value3 = value3;
+
+	this.answer4 = answer4;
+	this.value4 = value4;
+
+	this.timestamp = timestamp;
+}
 
 stream.on('tweet', function(tweet) {
 
@@ -32,12 +81,32 @@ stream.on('tweet', function(tweet) {
 		};
 
 		PythonShell.run('mturkconnector.py', options, function(err, results) {
+
+
 			if (err) throw err;
-		
 			console.log(results);
+
 			actualArray = results[0].split(",");
-			// console.log(actualArray);
-			// results is an array consisting of messages collected during execution 
+			toStore = new question(firstQuestion, res[1], results[0], res[2],
+				results[1], res[3], results[2], res[4], results[3], Date.now());
+			client.rpush('questions', JSON.stringify(toStore));
+			totalResults.push(JSON.stringify(toStore));
+			console.log(JSON.stringify(toStore));
+
+			client.lindex('questions',5, function(err, result) {
+				if (err) {
+					console.log(error);
+				} else {
+					console.log(result);
+					//console.log(result[4]["value1"]);
+				}
+			});
+
+			io.sockets.emit('newQuestion', toStore);
+
+			//console.log(client.lindex('questions', 0));
+
+
 			mostPopular = 0;
 			mostPopularCount = actualArray[0];
 			answer = "";
@@ -47,7 +116,7 @@ stream.on('tweet', function(tweet) {
 					mostPopular = i;
 				}
 			}
-			// console.log(mostPopular + " , " + mostPopularCount);
+
 			switch (mostPopular) {
 				case 0:
 					answer = res[1];
@@ -64,8 +133,7 @@ stream.on('tweet', function(tweet) {
 
 			}
 			Bot.post('statuses/update', {
-					status: '@' + tweet.user.screen_name + " The crowd has spoken! " + "You asked " + firstQuestion + " the crowd thinks "
-					+ answer,
+					status: '@' + tweet.user.screen_name + " The crowd has spoken! " + "You asked " + firstQuestion + " the crowd thinks " + answer,
 					in_reply_to_status_id: tweet.id
 				},
 				function(err, data, response) {
@@ -73,9 +141,7 @@ stream.on('tweet', function(tweet) {
 						console.log("Error");
 						console.log(err);
 					}
-					// console.log(response);
 				})
-		//	console.log('results: %j', results);
 		});
 	}
 })
