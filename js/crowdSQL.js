@@ -4,33 +4,23 @@ currentQuestions = "";
 numQuestions = 0;
 newQuestion = "";
 
+
+
 socket.on('start', function (streamOfQuestions, numQuestions) {
 id = socket.socket.sessionid;
 currentQuestions = streamOfQuestions;
 //newQuestion =JSON.parse(currentQuestions[0]);
+console.log(streamOfQuestions);
 this.numQuestions = numQuestions;
 initialLoad(currentQuestions);
 socket.emit('requestMoreConnections');
 });
 
-socket.on('newQuestion', function(question) {
-//    console.log("NEWQUESTION");
-    newQuestion = question;
-    console.log(newQuestion);
-    draw();
-});
-
 socket.on('fetchedOldQuestion', function(question) {
-    console.log("fetchedOldQuestion");
-    newQuestion = question;
-});
-
-
-function draw() {
-    $("#survey li:last-child").remove();
-
-   parsed = JSON.parse(newQuestion);
-
+    console.log(question);
+    console.log(JSON.parse(question));
+    
+    parsed = JSON.parse(question);
     question = parsed.question;
     answers = [];
 
@@ -40,12 +30,12 @@ function draw() {
     answers.push(parsed.answer4);
     values = parsed.value1.split(",");
 
-    socket.emit('requestMoreConnections');
+
     loadSurveyGraphs(question, answers, values, 4);
-}
-
-
-s = setInterval(draw, 1000);
+    $("#survey li:last-child").remove();
+    
+    console.log(question);
+});
 
 function initialLoad(data) {
     //console.log(data);
@@ -95,7 +85,7 @@ function loadSurveyGraphs(question, answers, results, i) {
 
 
 
-// $(document).ready(function() {
+$(document).ready(function() {
  
     window.odometerOptions = {
       auto: false, // Don't automatically initialize everything with class 'odometer'
@@ -110,6 +100,16 @@ function loadSurveyGraphs(question, answers, results, i) {
       el: odomEl,
       value: 10
     });
+
+      setTimeout(function(){ 
+  var interval = setInterval(function(){
+        var val = od.value;
+        // console.log(val + ": ");
+        od.update((val + 1));
+        }, 1000);    
+}, 1500);
+
+});
 
     // od.update = 555;
     var config1 = liquidFillGaugeDefaultSettings();
@@ -179,15 +179,15 @@ function loadSurveyGraphs(question, answers, results, i) {
     // initialLoad(results);
 
 
-  setTimeout(function(){ 
-  var interval = setInterval(function(){
-        var val = od.value;
-        // console.log(val + ": ");
-        od.update((val + 1));
-        }, 1000);    
-}, 1500);
+//   setTimeout(function(){ 
+//   var interval = setInterval(function(){
+//         var val = od.value;
+//         // console.log(val + ": ");
+//         od.update((val + 1));
+//         }, 1000);    
+// }, 1500);
 
-});
+// });
 
 
-//});
+// //});
