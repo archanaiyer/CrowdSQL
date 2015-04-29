@@ -7,23 +7,23 @@ import get_hits
 import time
 import sys
 
-SANDBOX = True
+SANDBOX = False
 # Number of different HITs posted for this task 
 NUMBER_OF_HITS = 1 
 # Number of tasks that DIFFERENT workers will be able to take for each HIT
-NUMBER_OF_ASSIGNMENTS = 1
+NUMBER_OF_ASSIGNMENTS = 5
 # How long that the task will stay visible if not taken by a worker (in seconds)
-LIFETIME = 60 * 7 
+LIFETIME = 60 * 180	
 # Base payment value for completing the task (in dollars)
-REWARD = 0.2
+REWARD = 0.05
 # How long the worker will be able to work on a single task (in seconds)
-DURATION = 60*2  
+DURATION = 60 * 2 
 # How long after the task is completed will the worker be automatically paid if not manually approved (in seconds)
 APPROVAL_DELAY = 60*60*2  
 
 conn = None
 # HIT title (as it will appear on the public listing)
-TITLE = 'Earn $0.20 by answering 1 SIMPLE Question!'
+TITLE = 'Earn $0.05 by answering 1 SIMPLE Question!'
 # Description of the HIT that workers will see when deciding to accept it or not
 DESCRIPTION = 'Go through the answer choices. Give us your opinion and we reward you.'
 # Search terms for the HIT posting
@@ -87,8 +87,8 @@ def createHits(question, answers, params):
 	#For Loop to create and post hits
 	for i in range(0, NUMBER_OF_HITS):
 		create_hit_rs = conn.create_hit(questions=questionForm, lifetime=LIFETIME, max_assignments=NUMBER_OF_ASSIGNMENTS, title=TITLE, keywords=KEYWORDS, reward=REWARD, duration=DURATION, approval_delay=APPROVAL_DELAY, annotation=DESCRIPTION)
-		print(preview_url + create_hit_rs[0].HITTypeId)
-		# print("HIT ID: " + create_hit_rs[0].HITId)
+		#print(preview_url + create_hit_rs[0].HITTypeId)
+		#print("HIT ID: " + create_hit_rs[0].HITId)
 		hitIdList.append(create_hit_rs[0].HITId);
 
 	return hitIdList
