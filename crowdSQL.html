@@ -22,7 +22,11 @@
   </div>
 </nav>
 <div class="row">
-    <div class="col-md-4">   
+    <div class="col-md-4"> 
+        <h3 class="piegraph-label">Categories of questions</h3>
+        <img id ="pie" src="pie.png" alt="Pie graph">
+        <h3 class="piegraph-label">Frequency of questions through the day</h3>
+        <img id ="pie" src="daygraph.png" alt="Pie graph">  
     </div>
     <div class="col-md-4 list-container">
         <ul id="survey">
@@ -35,7 +39,14 @@
                 <div id="odometer-item" class="odometer"></div>
             </div>
         </div>
-        <div class="row"></div>
+        <div class="row">
+            <h3 class="worker-label"> Dollars spent</h3>
+        <div class="row">
+            <div class="col-md- 6 col-md-offset-4">
+                <div id="odometer-item" class="odometer"></div>
+            </div>
+        </div>
+        </div>
         
  
     </div>
@@ -59,7 +70,7 @@
 
 
 
-.worker-label
+.worker-label, .piegraph-label
 {
     margin-top: 30%;
     font-size: 30px;
@@ -76,11 +87,6 @@ div.graphlabel{
     margin-top: 0px;
 }
 
-.list-container {
-  background-color: rgba(158, 158, 158, 0.07);
-  border: black;
-  border-style: solid;
-}  
 .question{
     text-align: center;
 }
@@ -97,6 +103,10 @@ ul{
     list-style-type: none;
 }
 
+#pie{
+   width:390px;
+   height:235px 
+}
 </style>
 
 </body>
