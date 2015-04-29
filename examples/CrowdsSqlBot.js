@@ -20,6 +20,17 @@ client.lrange('questions', 0, -1, function(err, result) {
 	}
 });
 
+
+function drawClients() {
+	toSend = totalResults.shift();
+	totalResults.push(toSend);
+	io.sockets.emit('fetchedOldQuestion', toSend);
+}
+
+s = setInterval(drawClients,1000);
+
+
+
 //console.log(io.sockets);
 server.listen(8080);
 io.set('log level', 1);
@@ -27,11 +38,6 @@ io.set('log level', 1);
 io.sockets.on('connection', function(socket) {
 	curSocket = socket.id;
 	io.sockets.socket(curSocket).emit('start', totalResults.slice(0, 3), totalResults.length);
-	socket.on("requestMoreConnections", function() {
-		toSend = totalResults.shift();
-		totalResults.push(toSend);
-		io.sockets.emit('fetchedOldQuestion', toSend); // results in: { userEmail: 'awesome' }
-	})
 });
 
 var options = {
