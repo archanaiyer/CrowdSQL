@@ -96,6 +96,22 @@ function loadSurveyGraphs(question, answers, results, i) {
 
 
 // $(document).ready(function() {
+ 
+    window.odometerOptions = {
+      auto: false, // Don't automatically initialize everything with class 'odometer'
+      format: '(,ddd).dd', // Change how digit groups are formatted, and how many digits are shown after the decimal point
+      duration: 3000, // Change how long the javascript expects the CSS animation to take
+      animation: 'count' // Count is a simpler animation method which just increments the value,
+                     // use it when you're looking for something more subtle.
+    };
+
+    var odomEl = document.querySelector('#odometer-item');
+    od = new Odometer({
+      el: odomEl,
+      value: 10
+    });
+
+    // od.update = 555;
     var config1 = liquidFillGaugeDefaultSettings();
     config1.circleColor = "#FF7777";
     config1.textColor = "#FF4444";
@@ -138,24 +154,40 @@ function loadSurveyGraphs(question, answers, results, i) {
     config4.waveAnimateTime = 2000;
     config4.waveHeight = 0.3;
 
-    results = [{
-        "question": "Hawaii?",
-        "Lol": 10,
-        "No": 10,
-        "Sure": 10,
-        "Maybe": 15
-    }, {
-        "question": "Bananas",
-        "Totes": 14,
-        "Oyeah": 40,
-        "Ew": 30,
-        "Potato": 45
-    }, {
-        "question": "Sleep?",
-        "It's for losers": 14,
-        "Oyeah": 40,
-        "YESSS": 30,
-        "<3": 45
-    }];
+// <<<<<<< HEAD
+//     results = [{
+//         "question": "Hawaii?",
+//         "Lol": 10,
+//         "No": 10,
+//         "Sure": 10,
+//         "Maybe": 15
+//     }, {
+//         "question": "Bananas",
+//         "Totes": 14,
+//         "Oyeah": 40,
+//         "Ew": 30,
+//         "Potato": 45
+//     }, {
+//         "question": "Sleep?",
+//         "It's for losers": 14,
+//         "Oyeah": 40,
+//         "YESSS": 30,
+//         "<3": 45
+//     }];
+// =======
+//     results = [{"question":"Hawaii?","Lol":10,"No":10,"Sure":10,"Maybe":15},{"question":"Bananas","Totes":14,"Oyeah":40,"Ew":30,"Potato":45},{"question":"Sleep?","It's for losers":14,"Oyeah":40,"YESSS":30,"<3":45}];
+    // initialLoad(results);
+
+
+  setTimeout(function(){ 
+  var interval = setInterval(function(){
+        var val = od.value;
+        // console.log(val + ": ");
+        od.update((val + 1));
+        }, 1000);    
+}, 1500);
+
+});
+
 
 //});
