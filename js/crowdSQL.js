@@ -5,7 +5,6 @@ numQuestions = 0;
 newQuestion = "";
 
 
-
 socket.on('start', function (streamOfQuestions, numQuestions) {
 id = socket.socket.sessionid;
 currentQuestions = streamOfQuestions;
