@@ -17,6 +17,12 @@ $( document ).ready(function() {
       value: 10
     });
 
+    var odomEl = document.querySelector('#odometer-item');
+    od = new Odometer({
+      el: odomEl,
+      value: 10
+    });
+
     // od.update = 555;
     var config1 = liquidFillGaugeDefaultSettings();
     config1.circleColor = "#FF7777";
